@@ -1,0 +1,218 @@
+body {
+    --background-color: #FFEAD6;
+    --accent-color: #FF512B;
+    --solid-color: hsl(220, 13%, 9%);
+    --border-color: #353a46;
+    background-color: var(--background-color);
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10rem;
+    background-image: linear-gradient(182deg, var(--accent-color) 70%, var(--background-color) calc(70% + 2px));
+}
+
+.header-button {
+    margin-top: 2rem;
+    padding: 0;
+    background-color: var(--solid-color);
+    height: 3rem;
+    width: 11rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border-color);
+    font-size: 1.125rem;
+    color: #e6e7eb;
+    transition: background-color 0.25s, border-color 0.25s, margin-left 0.25s;
+}
+
+.double:first-of-type {
+    margin-left: calc(33.3% - 6.5rem);
+}
+
+.double:not(:first-of-type) {
+    margin-left: calc(33.3% - 11rem);
+}
+
+.triple:first-of-type {
+    margin-left: calc(25% - 6.5rem);
+}
+
+.triple:not(:first-of-type) {
+    margin-left: calc(25% - 11rem);
+}
+
+.header-button:hover {
+    background-color: hsl(223, 13%, 31%);
+    border-color: #888;
+    cursor: pointer;
+}
+
+.hamburger {
+    display: none;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 10rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    background-image: linear-gradient(178deg, var(--background-color) 50%, var(--solid-color) calc(50% + 2px));
+}
+
+.hidden {
+    display: none;
+}
+
+.modal {
+    width: 30rem;
+    height: 15rem;
+    border-radius: 2rem;
+    padding: 1.5rem;
+    border: none;
+    background-color: var(--background-color);
+    opacity: 0;
+    overflow: hidden;
+    transition: opacity 0.125s ease-out;
+}
+
+.modal[open] {
+    pointer-events: inherit;
+}
+
+.modal.open {
+    opacity: 1;
+}
+
+.modal::backdrop {
+    opacity: 0;
+    background-color: #10101088;
+    transition: opacity 0.125s ease-out;
+}
+
+.modal.open::backdrop {
+    opacity: 1;
+}
+
+.modal-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.modal-header h2 {
+    margin: 0;
+}
+
+.modal-close {
+    right: 0;
+}
+
+.icon-line {
+    stroke: var(--border-color);
+    stroke-width: 20px;
+    transition: stroke 0.25s, stroke-width 0.25s;
+}
+
+.icon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.icon:hover .icon-line {
+    stroke: #22222c;
+    stroke-width: 25px;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-row {
+    flex-direction: row;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.space-around {
+    justify-content: space-around;
+}
+
+.space-evenly {
+    justify-content: space-evenly;
+}
+
+.space-between {
+    justify-content: space-between;
+}
+
+.modal-form {
+    text-align: center;
+}
+
+.modal-form input {
+    font-size: 2rem;
+    text-align: center;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    appearance: none;
+}
+
+.modal-form div {
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.modal-form input[type=number] {
+    width: 5rem;
+    height: 3rem;
+    border-radius: 0.5rem;
+}
+
+.modal-form input[type=text] {
+    height: 3rem;
+    width: 20rem;
+    border-radius: 0.5rem;
+}
+
+input[type=number], input[type=text], textarea {
+    border: 1px solid var(--border-color);
+    transition: border 0.125s, box-shadow 0.125s;
+}
+
+input[type=number]:focus, input[type=text]:focus, textarea:focus {
+    box-shadow: 0px 0px 6px 1px rgba(45,255,196,0.92);
+    border: 1px solid rgba(45,255,196,0.5);
+    outline: none;
+}
+
+button[type=submit] {
+    font-size: 1.125rem;
+    height: 3rem;
+    width: 7rem;
+    border-radius: 1.125rem;
+    border: none;
+    color: white;
+    background-color: rgba(40, 223, 171, 0.92);
+    transition: background-color 0.25s, box-shadow 0.25s;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+button[type=submit]:focus, button[type=submit]:hover {
+    background-color: rgba(45,255,196,0.92);
+    box-shadow: 0px 0px 15px 1px rgba(45,255,196,0.92);
+}

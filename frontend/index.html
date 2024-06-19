@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="./styles.css">
+    </head>
+    <body>
+        <div class="header">
+            <div class="hamburger">
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+            </div>
+            <button id="new-button" class="header-button triple">New</button>
+            <button id="import-button" class="header-button triple">Import</button>
+            <button id="save-button" class="header-button triple">Save As</button>
+        </div>
+        <div class="content">
+            <dialog id="new-modal" class="modal">
+                <div class="modal-header">
+                    <span></span>
+                    <h2>New Font</h2>
+                    <svg id="new-close" class="modal-close icon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="new-close" viewBox="0 0 100 100" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
+                        <line class="icon-line" id="close-u-backslash" x1="-43.232429" y1="-44.53723" x2="36.767571" y2="35.46277" transform="translate(53.232429 54.53723)" stroke-linecap="round"/>
+                        <line class="icon-line" id="close-u-slash" x1="-40" y1="40" x2="40" y2="-40" transform="translate(50 50)" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <form class="modal-form flex flex-column space-between" id="new-form">
+                    <div class="flex flex-row space-around">
+                        <div>
+                            <label for="new-width">Width</label><br>
+                            <input type="number" id="new-width" name="new-width">
+                        </div>
+                        <div>
+                            <label for="new-height">Height</label><br>
+                            <input type="number" id="new-height" name="new-height">
+                        </div>
+                        <div>
+                            <label for="new-characters">Characters</label><br>
+                            <input type="number" id="new-characters" name="new-characters">
+                        </div>
+                    </div>
+                    <div class="flex flex-row space-evenly">
+                        <button type="submit" id="new-create">Create</button>
+                    </div>
+                </form>
+            </dialog>
+            <div class="explain-content">
+                
+            </div>
+            <div class="edit-content">
+                <table class=""></table>
+            </div>
+        </div>
+        <div class="footer">
+
+        </div>
+        <script type="text/javascript" src="./js/main.js"></script>
+    </body>
+</html>
