@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
         currentCharacter = 0;
 
         updateEditor(currentFont!);
+        addSaveButton();
 
         closeModal("new-modal");
     });
@@ -121,7 +122,7 @@ const setPixel = (cell: HTMLTableCellElement, value: boolean) => {
 
 const closeModal = (id: string) => {
     const modal = <HTMLDialogElement>document.getElementById(id)!;
-    
+    // Do this in a timeout to let the fade animation play
     modal.classList.remove("open");
     setTimeout(() => {
         modal.close();
@@ -140,7 +141,7 @@ const toggleSaveButton = () => {
 
 const addSaveButton = () => {
     document.getElementById(SAVE_ID)?.classList.remove(HIDDEN_CLASS);
-        
+    
     const headerButtons = document.getElementsByClassName(HEADER_BUTTON_CLASS);
     for (let i = 0; i < headerButtons.length; i++) {
         const button = headerButtons[i];
