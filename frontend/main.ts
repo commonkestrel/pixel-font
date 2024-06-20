@@ -11,6 +11,10 @@ interface Font {
 let currentFont: Font | null = null;
 let currentCharacter: number = 0;
 
+let dragCurrent: [number, number] = [-1, -1];
+let dragValue: boolean = false;
+let mouseDown: boolean = false;
+
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("new-button")?.addEventListener("click", (ev) => {
         const modal = <any>document.getElementById("new-modal");
@@ -51,6 +55,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         closeModal("new-modal");
     });
+
+    document.addEventListener("mouseup", (_) => {
+        mouseDown = false;
+    });
+
+    document.addEventListener("dragend", (_) => {
+        mouseDown = false;
+    });
 });
 
 const updateEditor = (font: Font) => {
@@ -74,11 +86,29 @@ const updateEditor = (font: Font) => {
         for (let x = 0; x < font.width; x++) {
             const cell = row.insertCell();
             cell.style.width = widthPercent.toString() + "%";
+            cell.classList.add("pixel");
+            cell.draggable = false;
 
-            cell.classList.add("pixel")
-            cell.addEventListener("click", (ev) => {
-                togglePixel(y * font.width + x, cell);
+
+            cell.addEventListener("mousedown", (ev) => {
+                mouseDown = true;
+                dragCurrent = [x, y];
+                dragValue = togglePixel(y * font.width + x, cell);
             });
+
+            cell.addEventListener("mousemove", (ev) => {
+                console.log("move " + mouseDown + " " + dragCurrent + "  " + [x, y]);
+                if (mouseDown && (dragCurrent[0] != x || dragCurrent[1] != y)) {
+                    dragCurrent = [x, y];
+                    // Use dragValue to avoid confusing drag behavior
+                    setPixel(cell, dragValue);
+                    currentFont!.content[currentCharacter][y * font.width + x] = dragValue;
+                }
+            });
+
+            cell.addEventListener("dragstart", (ev) => {
+                ev.preventDefault();
+            })
         }
     }
 
@@ -101,13 +131,17 @@ const updateCharacter = (table: HTMLTableElement, font: Font) => {
     }
 }
 
-const togglePixel = (i: number, cell: HTMLTableCellElement) => {
+const togglePixel = (i: number, cell: HTMLTableCellElement): boolean => {
     if (currentFont != null) {
         const value = !currentFont.content[currentCharacter][i];
         currentFont.content[currentCharacter][i] = value;
         
         setPixel(cell, value);
+
+        return value;
     }
+
+    return false;
 }
 
 const setPixel = (cell: HTMLTableCellElement, value: boolean) => {
