@@ -115,22 +115,23 @@ body {
 
 .modal-close {
     right: 0;
+    --stroke-color: var(--border-color)
+}
+
+.modal-close:hover {
+    --stroke-color: #22222c;
+    --stroke-width: 25px;
 }
 
 .icon-line {
-    stroke: var(--border-color);
-    stroke-width: 20px;
+    stroke: var(--stroke-color);
+    stroke-width: var(--stroke-width);
     transition: stroke 0.25s, stroke-width 0.25s;
 }
 
 .icon {
     width: 1rem;
     height: 1rem;
-}
-
-.icon:hover .icon-line {
-    stroke: #22222c;
-    stroke-width: 25px;
 }
 
 .flex {
@@ -245,4 +246,40 @@ button[type=submit]:focus, button[type=submit]:hover {
     border: 1px solid var(--border-color);
     padding: 0;
     margin: 0;
+}
+
+.footer-element {
+    display: flex;
+    justify-content: center;
+    height: 6rem;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.arrow {
+    --stroke-color: var(--background-color);
+    --stroke-width: 0.5rem;
+}
+
+.open-arrow {
+    height: 50%;
+    width: 6rem;
+}
+
+.side-arrow {
+    height: 50%;
+}
+
+.arrow:hover {
+    --stroke-color: #FFF0F0;
+}
+
+.rot-90 {
+    transform: rotate(90deg);
+}
+
+.rot-270 {
+    transform: rotate(270deg);
 }
