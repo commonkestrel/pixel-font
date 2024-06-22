@@ -52,8 +52,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
         updateEditor(currentFont!);
         addSaveButton();
+        showCharacterSelect();
 
         closeModal("new-modal");
+    });
+
+    document.getElementById("select-open")?.addEventListener("click", (ev) => {
+        console.log("open select");
+    });
+
+    document.getElementById("select-next")?.addEventListener("click", (ev) => {
+        if(currentFont != null && currentCharacter < currentFont.content.length) {
+            currentCharacter++;
+
+            const table = <HTMLTableElement>document.getElementById("edit-table")!;
+            updateCharacter(table, currentFont);
+        }
+    });
+
+    document.getElementById("select-prev")?.addEventListener("click", (ev) => {
+        if (currentFont != null && currentCharacter > 0) {
+            currentCharacter--;
+            
+            const table = <HTMLTableElement>document.getElementById("edit-table")!;
+            updateCharacter(table, currentFont);
+        }
     });
 
     document.addEventListener("mouseup", (_) => {
@@ -108,7 +131,7 @@ const updateEditor = (font: Font) => {
 
             cell.addEventListener("dragstart", (ev) => {
                 ev.preventDefault();
-            })
+            });
         }
     }
 
@@ -163,6 +186,17 @@ const closeModal = (id: string) => {
     }, 250);
 }
 
+const showCharacterSelect = () => {
+    const characterSelect = document.getElementById("character-select");
+    if (characterSelect != null && currentFont != null) {
+        characterSelect.classList.remove("hidden");
+
+        const padding = hexSpaces(currentFont.content.length);
+        console.log(padding);
+        document.getElementById("character-index")!.innerHTML = toHex(currentCharacter, padding)
+    }
+}
+
 const toggleSaveButton = () => {
     const saveButton = document.getElementById(SAVE_ID);
         
@@ -193,4 +227,19 @@ const removeSaveButton = () => {
         button.classList.add("double");
         button.classList.remove("triple");
     }
+}
+
+const toHex = (value: number, padding: number): string => {
+    let str = "0x" + new Array(padding + 1).join('0');
+    const hex = value.toString(16);
+
+    str = str.substring(0, padding - hex.length) + hex;
+
+    return str;
+}
+
+const hexSpaces = (maxValue: number): number => {
+    let log = Math.floor(Math.log2(maxValue)) + 1;
+
+    return Math.ceil(log / 4);
 }

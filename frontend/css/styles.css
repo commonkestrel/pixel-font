@@ -64,12 +64,18 @@ body {
     height: 10rem;
     display: flex;
     flex-direction: row;
+    z-index: 98;
     justify-content: space-evenly;
-    background-image: linear-gradient(178deg, var(--background-color) 50%, var(--solid-color) calc(50% + 2px));
+    background-image: linear-gradient(178deg, var(--background-color) 30%, var(--solid-color) calc(30% + 2px));
+    transition: height 1s;
+}
+
+.footer .open {
+    height: 100%;
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .modal {
@@ -229,7 +235,7 @@ button[type=submit]:focus, button[type=submit]:hover {
     height: 100%;
     width: auto;
     max-width: 90vw;
-    max-height: 80vh;
+    max-height: calc(100vh - 13.25rem);
     z-index: 99;
     border-collapse: collapse;
 }
@@ -251,9 +257,9 @@ button[type=submit]:focus, button[type=submit]:hover {
 .footer-element {
     display: flex;
     justify-content: center;
-    height: 6rem;
+    height: 3.5rem;
     position: fixed;
-    bottom: 0;
+    bottom: 1rem;
     left: 50%;
     transform: translateX(-50%);
 }
@@ -261,25 +267,44 @@ button[type=submit]:focus, button[type=submit]:hover {
 .arrow {
     --stroke-color: var(--background-color);
     --stroke-width: 0.5rem;
+    height: calc(2.5rem / 2);
+    margin-bottom: 1rem;
 }
 
 .open-arrow {
-    height: 50%;
     width: 6rem;
+    transition: transform 0.25s;
 }
 
 .side-arrow {
-    height: 50%;
+    width: auto;
 }
 
 .arrow:hover {
     --stroke-color: #FFF0F0;
+    --stroke-width: 0.75rem;
+}
+
+.arrow-spacer {
+    min-width: 6rem;
 }
 
 .rot-90 {
     transform: rotate(90deg);
 }
 
+.rot-180 {
+    transform: rotateZ(180deg);
+}
+
 .rot-270 {
     transform: rotate(270deg);
+}
+
+h3 {
+    text-align: center;
+    color: var(--background-color);
+    font-size: 1.75rem;
+    margin-bottom: 0;
+    margin-top: -0.4rem;
 }
