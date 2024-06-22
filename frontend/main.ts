@@ -58,12 +58,33 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.getElementById("select-open")?.addEventListener("click", (ev) => {
-        console.log("open select");
+        const footer = document.getElementById("footer")!;
+        const header = document.getElementById("header")!;
+        const openArrow = document.getElementById("select-open")!;
+
+        if(footer.classList.contains("open")) {
+            footer.classList.remove("open");
+            openArrow.classList.remove("rot-180");
+            
+            setTimeout(() => header.classList.remove("close"), 500);
+            setTimeout(() => {
+                document.getElementById("edit-table")!.style.zIndex = "";
+            }, 1000);
+        } else {
+            footer.classList.add("open");
+            header.classList.add("close");
+            openArrow.classList.add("rot-180");
+
+            setTimeout(() => {
+                document.getElementById("edit-table")!.style.zIndex = "97";
+            }, 100);
+        }
     });
 
     document.getElementById("select-next")?.addEventListener("click", (ev) => {
         if(currentFont != null && currentCharacter < currentFont.content.length) {
             currentCharacter++;
+            updateIndex();
 
             const table = <HTMLTableElement>document.getElementById("edit-table")!;
             updateCharacter(table, currentFont);
@@ -73,6 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("select-prev")?.addEventListener("click", (ev) => {
         if (currentFont != null && currentCharacter > 0) {
             currentCharacter--;
+            updateIndex();
             
             const table = <HTMLTableElement>document.getElementById("edit-table")!;
             updateCharacter(table, currentFont);
@@ -190,10 +212,7 @@ const showCharacterSelect = () => {
     const characterSelect = document.getElementById("character-select");
     if (characterSelect != null && currentFont != null) {
         characterSelect.classList.remove("hidden");
-
-        const padding = hexSpaces(currentFont.content.length);
-        console.log(padding);
-        document.getElementById("character-index")!.innerHTML = toHex(currentCharacter, padding)
+        updateIndex();
     }
 }
 
@@ -233,7 +252,7 @@ const toHex = (value: number, padding: number): string => {
     let str = "0x" + new Array(padding + 1).join('0');
     const hex = value.toString(16);
 
-    str = str.substring(0, padding - hex.length) + hex;
+    str = str.substring(0, padding + 2 - hex.length) + hex;
 
     return str;
 }
@@ -242,4 +261,11 @@ const hexSpaces = (maxValue: number): number => {
     let log = Math.floor(Math.log2(maxValue)) + 1;
 
     return Math.ceil(log / 4);
+}
+
+const updateIndex = () => {
+    if (currentFont != null) {
+        const padding = hexSpaces(currentFont.content.length - 1);
+        document.getElementById("character-index")!.innerHTML = toHex(currentCharacter, padding);
+    }
 }
