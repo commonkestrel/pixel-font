@@ -8,6 +8,11 @@ body {
     background-color: var(--background-color);
 }
 
+.resize-anim-stop * {
+    transition: none !important;
+    animation: none !important;
+}
+
 .header {
     position: fixed;
     top: 0;
@@ -315,19 +320,15 @@ h3 {
 }
 
 #character-menu {
+    --sink: calc(100vh - 10rem - 1px);
     position: fixed;
-    top: 3rem;
+    top: calc(3rem + var(--sink));
     left: 3rem;
-    height: calc(100% - 10rem);
+    height: calc(100vh - 10rem - var(--sink));
     width: calc(100% - 6rem);
-    opacity: 1;
-    transition: opacity 0.5s;
     overflow-y: scroll;
     overflow-x: hidden;
-}
-
-#character-menu.close {
-    opacity: 0;
+    transition: height 1s, top 1s;
 }
 
 #character-menu::-webkit-scrollbar {
@@ -344,11 +345,17 @@ h3 {
 .menu-character {
     margin: 1.5rem 1.5rem;
     width: auto;
-    height: calc(((100% - 10rem) / 2) + 2rem);
+    height: calc(((100vh - 10rem) / 2) - 2.5rem);
     border: #404040 solid 0.5rem;
     border-radius: 1rem;
     border-collapse: collapse;
     transform: rotate(-5deg);
+    transition: transform 0.25s;
+}
+
+.menu-character:hover {
+    cursor: pointer;
+    transform: rotate(-3deg);
 }
 
 .menu-pixel {

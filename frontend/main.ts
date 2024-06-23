@@ -15,6 +15,16 @@ let dragCurrent: [number, number] = [-1, -1];
 let dragValue: boolean = false;
 let mouseDown: boolean = false;
 
+let resizeTimer: NodeJS.Timer;
+
+window.addEventListener("resize", () => {
+    document.body.classList.add("resize-anim-stop");
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+        document.body.classList.remove("resize-anim-stop");
+    }, 250);
+})
+
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("new-button")?.addEventListener("click", (ev) => {
         const modal = <any>document.getElementById("new-modal");
@@ -69,14 +79,16 @@ document.addEventListener("DOMContentLoaded", () => {
             footer.classList.add("open");
             header.classList.add("close");
             openArrow.classList.add("rot-180");
-
+            
+            setTimeout(() => {
+                const menu = document.getElementById("character-menu")!;
+                menu.style.setProperty("--sink", "0px");
+            }, 500);
+            
             setTimeout(() => {
                 document.getElementById("edit-table")!.style.zIndex = "97";
             }, 100);
 
-            setTimeout(() => {
-                document.getElementById("character-menu")!.classList.remove("close");
-            }, 500);
         }
     });
 
@@ -322,11 +334,12 @@ const closeFooter = () => {
     footer.classList.remove("open");
     openArrow.classList.remove("rot-180");
     
+    const menu = document.getElementById("character-menu")!;
+    menu.style.setProperty("--sink", "calc(100% - 10rem)");
+
     setTimeout(() => header.classList.remove("close"), 500);
     setTimeout(() => {
         document.getElementById("edit-table")!.style.zIndex = "";
     }, 1000);
-    setTimeout(() => {
-        document.getElementById("character-menu")!.classList.add("close");
-    }, 100);
+    
 }
