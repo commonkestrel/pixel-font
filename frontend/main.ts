@@ -51,6 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
         currentCharacter = 0;
 
         updateEditor(currentFont!);
+        populateCharacters(currentFont!);
         addSaveButton();
         showCharacterSelect();
 
@@ -70,6 +71,9 @@ document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => {
                 document.getElementById("edit-table")!.style.zIndex = "";
             }, 1000);
+            setTimeout(() => {
+                document.getElementById("character-menu")!.classList.add("hidden");
+            }, 100);
         } else {
             footer.classList.add("open");
             header.classList.add("close");
@@ -78,6 +82,10 @@ document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => {
                 document.getElementById("edit-table")!.style.zIndex = "97";
             }, 100);
+
+            setTimeout(() => {
+                document.getElementById("character-menu")!.classList.remove("hidden");
+            }, 1000);
         }
     });
 
@@ -115,7 +123,7 @@ const updateEditor = (font: Font) => {
     explainContent.classList.add("hidden");
 
     const editContent = document.getElementById("edit-content")!;
-    explainContent.classList.remove("hidden");
+    editContent.classList.remove("hidden");
 
     const editTable = <HTMLTableElement>document.getElementById("edit-table")!;
 
@@ -269,3 +277,39 @@ const updateIndex = () => {
         document.getElementById("character-index")!.innerHTML = toHex(currentCharacter, padding);
     }
 }
+
+const populateCharacters = (font: Font) => {
+    const menu = document.getElementById("character-menu");
+
+    if(menu != null) {
+        menu.replaceChildren();
+
+        for (let i = 0; i < font.content.length; i++) {
+            let character = <HTMLTableElement>document.createElement("table");
+            character.classList.add("menu-character");
+            character.style.aspectRatio = font.width.toString() + "/" + font.height.toString();
+            
+            const heightPercent = 100.0 / font.height;
+            const widthPercent = 100.0 / font.width;
+
+            for (let y = 0; y < font.height; y++) {
+                const row = character.insertRow();
+                row.style.height = heightPercent.toString() + "%";
+
+                for (let x = 0; x < font.width; x++) {
+                    const cell = row.insertCell();
+                    cell.style.width = widthPercent.toString() + "%";
+                    cell.classList.add("menu-pixel");
+                    
+                    if (font.content[i][y*font.width + x]) {
+                        cell.classList.add("on");
+                    } else {
+                        cell.classList.add("off");
+                    }
+                }
+            }
+
+            menu.appendChild(character);
+        }
+    }
+} 
