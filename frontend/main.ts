@@ -64,16 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const openArrow = document.getElementById("select-open")!;
 
         if(footer.classList.contains("open")) {
-            footer.classList.remove("open");
-            openArrow.classList.remove("rot-180");
-            
-            setTimeout(() => header.classList.remove("close"), 500);
-            setTimeout(() => {
-                document.getElementById("edit-table")!.style.zIndex = "";
-            }, 1000);
-            setTimeout(() => {
-                document.getElementById("character-menu")!.classList.add("hidden");
-            }, 100);
+            closeFooter();
         } else {
             footer.classList.add("open");
             header.classList.add("close");
@@ -84,8 +75,8 @@ document.addEventListener("DOMContentLoaded", () => {
             }, 100);
 
             setTimeout(() => {
-                document.getElementById("character-menu")!.classList.remove("hidden");
-            }, 1000);
+                document.getElementById("character-menu")!.classList.remove("close");
+            }, 500);
         }
     });
 
@@ -288,6 +279,15 @@ const populateCharacters = (font: Font) => {
             let character = <HTMLTableElement>document.createElement("table");
             character.classList.add("menu-character");
             character.style.aspectRatio = font.width.toString() + "/" + font.height.toString();
+
+            character.addEventListener("click", (ev) => {
+                currentCharacter = i;
+
+                const table = <HTMLTableElement>document.getElementById("edit-table")!;
+
+                updateCharacter(table, currentFont!);
+                closeFooter();
+            })
             
             const heightPercent = 100.0 / font.height;
             const widthPercent = 100.0 / font.width;
@@ -312,4 +312,21 @@ const populateCharacters = (font: Font) => {
             menu.appendChild(character);
         }
     }
-} 
+}
+
+const closeFooter = () => {
+    const footer = document.getElementById("footer")!;
+    const header = document.getElementById("header")!;
+    const openArrow = document.getElementById("select-open")!;
+
+    footer.classList.remove("open");
+    openArrow.classList.remove("rot-180");
+    
+    setTimeout(() => header.classList.remove("close"), 500);
+    setTimeout(() => {
+        document.getElementById("edit-table")!.style.zIndex = "";
+    }, 1000);
+    setTimeout(() => {
+        document.getElementById("character-menu")!.classList.add("close");
+    }, 100);
+}
