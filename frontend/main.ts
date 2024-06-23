@@ -82,7 +82,12 @@ document.addEventListener("DOMContentLoaded", () => {
             
             setTimeout(() => {
                 const menu = document.getElementById("character-menu")!;
-                menu.style.setProperty("--sink", "0px");
+                menu.classList.remove("sink");
+            }, 500);
+
+            setTimeout(() => {
+                const blocker = document.getElementById("footer-blocker")!;
+                blocker.classList.remove("hidden");
             }, 500);
             
             setTimeout(() => {
@@ -335,7 +340,11 @@ const closeFooter = () => {
     openArrow.classList.remove("rot-180");
     
     const menu = document.getElementById("character-menu")!;
-    menu.style.setProperty("--sink", "calc(100% - 10rem)");
+    menu.classList.add("sink");
+    setTimeout(() => {
+        const blocker = document.getElementById("footer-blocker")!;
+        blocker.classList.add("hidden");
+    }, 700);
 
     setTimeout(() => header.classList.remove("close"), 500);
     setTimeout(() => {

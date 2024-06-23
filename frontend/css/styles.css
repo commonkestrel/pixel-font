@@ -84,6 +84,16 @@ body {
     height: 150vh;
 }
 
+.footer-blocker {
+    z-index: 98;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 7rem;
+    width: 100%;
+    background-color: var(--solid-color);
+}
+
 .hidden {
     display: none !important;
 }
@@ -271,6 +281,7 @@ button[type=submit]:focus, button[type=submit]:hover {
     position: fixed;
     bottom: 1rem;
     left: 50%;
+    z-index: 100;
     transform: translateX(-50%);
 }
 
@@ -320,15 +331,19 @@ h3 {
 }
 
 #character-menu {
-    --sink: calc(100vh - 10rem - 1px);
     position: fixed;
-    top: calc(3rem + var(--sink));
+    top: 3rem;
     left: 3rem;
-    height: calc(100vh - 10rem - var(--sink));
+    height: 100vh - 10rem;
     width: calc(100% - 6rem);
     overflow-y: scroll;
     overflow-x: hidden;
-    transition: height 1s, top 1s;
+    transform: translateY(0);
+    transition: transform 1s;
+}
+
+#character-menu.sink {
+    transform: translateY(100vh);
 }
 
 #character-menu::-webkit-scrollbar {
