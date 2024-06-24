@@ -161,8 +161,10 @@ const updateEditor = (font: Font) => {
                 console.log("move " + mouseDown + " " + dragCurrent + "  " + [x, y]);
                 if (mouseDown && (dragCurrent[0] != x || dragCurrent[1] != y)) {
                     dragCurrent = [x, y];
+                    const i = y * currentFont!.width + x;
+
                     // Use dragValue to avoid confusing drag behavior
-                    setPixel(cell, dragValue);
+                    setPixel(i, cell, dragValue);
                     currentFont!.content[currentCharacter][y * font.width + x] = dragValue;
                 }
             });
@@ -187,7 +189,7 @@ const updateCharacter = (table: HTMLTableElement, font: Font) => {
             const row = body.children.item(y)!;
             const cell = <HTMLTableCellElement>row.children.item(x)!;
 
-            setPixel(cell, value);
+            setPixel(i, cell, value);
         }
     }
 }
@@ -197,7 +199,7 @@ const togglePixel = (i: number, cell: HTMLTableCellElement): boolean => {
         const value = !currentFont.content[currentCharacter][i];
         currentFont.content[currentCharacter][i] = value;
         
-        setPixel(cell, value);
+        setPixel(i, cell, value);
 
         return value;
     }
@@ -205,13 +207,28 @@ const togglePixel = (i: number, cell: HTMLTableCellElement): boolean => {
     return false;
 }
 
-const setPixel = (cell: HTMLTableCellElement, value: boolean) => {
+const setPixel = (i: number, cell: HTMLTableCellElement, value: boolean) => {
     if (value) {
         cell.classList.remove("pixel-off");
         cell.classList.add("pixel-on");
     } else {
         cell.classList.remove("pixel-on");
         cell.classList.add("pixel-off");
+    }
+
+    const character = document.getElementById("character-menu")!.children.item(currentCharacter);
+    if (character != null) {
+        const x = i % currentFont!.width;
+        const y = Math.floor(i / currentFont!.width);
+
+        const menuCell = character.firstElementChild!.children.item(y)!.children.item(x)!;
+        if (value) {
+            menuCell.classList.remove("off");
+            menuCell.classList.add("on");
+        } else {
+            menuCell.classList.remove("on");
+            menuCell.classList.add("off");
+        }
     }
 }
 
