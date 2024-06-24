@@ -272,6 +272,7 @@ button[type=submit]:focus, button[type=submit]:hover {
     border: 1px solid var(--border-color);
     padding: 0;
     margin: 0;
+    transition: background-color 50ms;
 }
 
 .footer-element {
@@ -358,19 +359,31 @@ h3 {
 }
 
 .menu-character {
+    display: flex;
+    flex-direction: row;
+    transform: rotate(-5deg);
     margin: 1.5rem 1.5rem;
     width: auto;
-    height: calc(((100vh - 10rem) / 2) - 2.5rem);
-    border: #404040 solid 0.5rem;
-    border-radius: 1rem;
-    border-collapse: collapse;
-    transform: rotate(-5deg);
+    height: calc(((100vh - 10rem) / 2) - 3.5rem);
     transition: transform 0.25s;
 }
 
 .menu-character:hover {
     cursor: pointer;
     transform: rotate(-3deg);
+}
+
+.menu-character-inner {
+    height: 100%;
+    width: auto;
+    border: #404040 solid 0.5rem;
+    border-radius: 1rem;
+}
+
+.menu-character-inner table {
+    height: 100%;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 .menu-pixel {
@@ -384,4 +397,9 @@ h3 {
 
 .menu-pixel.on {
     background-color: var(--on-color);
+}
+
+.menu-index {
+    writing-mode: vertical-lr;
+    margin: 0;
 }

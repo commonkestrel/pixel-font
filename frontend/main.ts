@@ -221,7 +221,7 @@ const setPixel = (i: number, cell: HTMLTableCellElement, value: boolean) => {
         const x = i % currentFont!.width;
         const y = Math.floor(i / currentFont!.width);
 
-        const menuCell = character.firstElementChild!.children.item(y)!.children.item(x)!;
+        const menuCell = character.firstElementChild!.firstElementChild!.firstElementChild!.children.item(y)!.children.item(x)!;
         if (value) {
             menuCell.classList.remove("off");
             menuCell.classList.add("on");
@@ -310,24 +310,28 @@ const populateCharacters = (font: Font) => {
         menu.replaceChildren();
 
         for (let i = 0; i < font.content.length; i++) {
-            let character = <HTMLTableElement>document.createElement("table");
+            let character = <HTMLDivElement>document.createElement("div");
+            let characterInner = character.appendChild(document.createElement("div"));
+            let table = characterInner.appendChild(document.createElement("table"));
             character.classList.add("menu-character");
-            character.style.aspectRatio = font.width.toString() + "/" + font.height.toString();
+            characterInner.classList.add("menu-character-inner");
+            characterInner.style.aspectRatio = font.width.toString() + "/" + font.height.toString();
 
             character.addEventListener("click", (ev) => {
                 currentCharacter = i;
+                updateIndex();
 
                 const table = <HTMLTableElement>document.getElementById("edit-table")!;
 
                 updateCharacter(table, currentFont!);
                 closeFooter();
-            })
+            });
             
             const heightPercent = 100.0 / font.height;
             const widthPercent = 100.0 / font.width;
 
             for (let y = 0; y < font.height; y++) {
-                const row = character.insertRow();
+                const row = table.insertRow();
                 row.style.height = heightPercent.toString() + "%";
 
                 for (let x = 0; x < font.width; x++) {
@@ -342,6 +346,14 @@ const populateCharacters = (font: Font) => {
                     }
                 }
             }
+
+            const padding = hexSpaces(font.content.length - 1);
+            const indexStr = toHex(i, padding);
+
+            const index = document.createElement("h3");
+            index.innerText = indexStr;
+            index.classList.add("menu-index");
+            character.appendChild(index);
 
             menu.appendChild(character);
         }
