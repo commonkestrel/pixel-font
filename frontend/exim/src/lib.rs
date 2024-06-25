@@ -8,6 +8,6 @@ extern "C" {
 }
 
 #[wasm_bindgen]
-pub fn greet() {
+pub fn serialize(font: Font) -> Vec<u8> {
     alert("Hello, exim!");
 }
