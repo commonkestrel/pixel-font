@@ -17,12 +17,9 @@ pub struct Font {
 }
 
 #[wasm_bindgen]
-impl Font {
-    #[wasm_bindgen(constructor)]
-    pub fn new(width: usize, height: usize, content: Vec<js_sys::Array>) -> Font {
-        let content = content.into_iter().map(|c| c.into_iter().filter_map(|p| p.as_bool()).collect::<Vec<bool>>()).collect();
-        Font {width, height, content}
-    }
+pub fn create_font(width: usize, height: usize, content: Vec<js_sys::Array>) -> Font {
+    let content = content.into_iter().map(|c| c.into_iter().filter_map(|p| p.as_bool()).collect::<Vec<bool>>()).collect();
+    Font {width, height, content}
 }
 
 #[wasm_bindgen]

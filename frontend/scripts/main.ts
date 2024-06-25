@@ -1,4 +1,4 @@
-import * as exim from "./dist/exim";
+import * as exim from "./exim/pkg/exim";
 
 const SAVE_ID: string = "save-button";
 const HIDDEN_CLASS: string = "hidden";
@@ -38,7 +38,8 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("saving");
 
         if (currentFont != null) {
-            const font = new exim.Font(currentFont.width, currentFont.height, currentFont.content);
+
+            const font = exim.create_font(currentFont.width, currentFont.height, currentFont.content);
             const content = exim.serialize(font);
 
             const file = new Blob([content], { type: "application/octet-stream" });
