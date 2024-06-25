@@ -1,3 +1,5 @@
+import * as exim from "./exim/pkg"
+
 const SAVE_ID: string = "save-button";
 const HIDDEN_CLASS: string = "hidden";
 const HEADER_BUTTON_CLASS = "header-button";
@@ -30,6 +32,31 @@ document.addEventListener("DOMContentLoaded", () => {
         const modal = <any>document.getElementById("new-modal");
         modal?.showModal();
         modal?.classList.add("open");
+    });
+
+    document.getElementById("save-button")?.addEventListener("click", () => {
+    console.log("saving");
+
+        if (currentFont != null) {
+            const font = new exim.Font(currentFont.width, currentFont.height, currentFont.content);
+            const content = exim.serialize(font);
+
+            const file = new Blob([content], { type: "application/octet-stream" });
+            if('msSaveOrOpenBlob' in window.navigator) {
+                (<any>window.navigator.msSaveOrOpenBlob)(file, "font.rom");
+            } else {
+                const a = document.createElement('a');
+                const url = URL.createObjectURL(file);
+                a.href = url;
+                a.download = "font.rom";
+                document.body.appendChild(a);
+                a.click();
+                setTimeout(() => {
+                    document.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                }, 0);
+            }
+        }
     });
 
     document.getElementById("new-close")?.addEventListener("click", (ev) => {
@@ -158,7 +185,6 @@ const updateEditor = (font: Font) => {
             });
 
             cell.addEventListener("mousemove", (ev) => {
-                console.log("move " + mouseDown + " " + dragCurrent + "  " + [x, y]);
                 if (mouseDown && (dragCurrent[0] != x || dragCurrent[1] != y)) {
                     dragCurrent = [x, y];
                     const i = y * currentFont!.width + x;

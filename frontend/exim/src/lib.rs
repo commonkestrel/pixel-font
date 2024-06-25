@@ -27,16 +27,17 @@ impl Font {
 
 #[wasm_bindgen]
 pub fn serialize(font: Font) -> Vec<u8> {
+    utils::set_panic_hook();
     console_log!("{:?}", font);
 
     let i_size = font.content.len().checked_ilog2().unwrap_or(0) + 1;
     let y_size = font.height.checked_ilog2().unwrap_or(0) + 1;
     // `x_size` is divided by 8 because we are packing 8 bits into a byte,
     // and x generally works best for this since screens typically scan ltr.
-    let x_size = ((font.width.checked_ilog2().unwrap_or(0) + 1) / 8).max(1);
+    let x_size = ((font.width.checked_ilog2().unwrap_or(0) + 1) / 8);
     let index_size = i_size + x_size + y_size;
 
-    let mut exp = vec![0x00; index_size as usize];
+    let mut exp = vec![0x00; 1 << index_size];
 
     for (c, character) in font.content.into_iter().enumerate() {
         for y in 0..font.height {
