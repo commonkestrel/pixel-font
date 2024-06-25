@@ -1,2 +1,5 @@
-*/target
-*/out
+**/target
+**/out
+**/node_modules
+**/dist
+**/pkg
