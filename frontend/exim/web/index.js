@@ -1,9 +1,9 @@
 import * as exim from "wasm-exim";
 
 const font = new exim.Font(
-    8,
-    16,
-    [true, false, true]
+    2,
+    3,
+    [[true, false, true, true, true, false]]
 );
 
-exim.serialize(font);
+console.log(exim.serialize(font));

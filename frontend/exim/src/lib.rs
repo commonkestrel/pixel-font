@@ -13,14 +13,14 @@ extern "C" {
 pub struct Font {
     width: usize,
     height: usize,
-    content: Vec<bool>
+    content: Vec<Vec<bool>>
 }
 
 #[wasm_bindgen]
 impl Font {
     #[wasm_bindgen(constructor)]
-    pub fn new(width: usize, height: usize, content: Vec<js_sys::Boolean>) -> Font {
-        let content = content.into_iter().filter_map(|p| p.as_bool()).collect();
+    pub fn new(width: usize, height: usize, content: Vec<js_sys::Array>) -> Font {
+        let content = content.into_iter().map(|c| c.into_iter().filter_map(|p| p.as_bool()).collect::<Vec<bool>>()).collect();
         Font {width, height, content}
     }
 }
@@ -29,5 +29,27 @@ impl Font {
 pub fn serialize(font: Font) -> Vec<u8> {
     console_log!("{:?}", font);
 
-    vec![0, 1, 2]
+    let i_size = font.content.len().checked_ilog2().unwrap_or(0) + 1;
+    let y_size = font.height.checked_ilog2().unwrap_or(0) + 1;
+    // `x_size` is divided by 8 because we are packing 8 bits into a byte,
+    // and x generally works best for this since screens typically scan ltr.
+    let x_size = ((font.width.checked_ilog2().unwrap_or(0) + 1) / 8).max(1);
+    let index_size = i_size + x_size + y_size;
+
+    let mut exp = vec![0x00; index_size as usize];
+
+    for (c, character) in font.content.into_iter().enumerate() {
+        for y in 0..font.height {
+            for x in 0..font.width {
+                let index = (c << (x_size + y_size)) + (y << x_size) + x/8;
+                let bit = x % 8;
+
+                exp[index] |= (character[y*font.width + x] as u8) << bit;
+            }
+        }
+    }
+
+    console_log!("{exp:?}");
+
+    exp
 }
