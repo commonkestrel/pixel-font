@@ -1,4 +1,4 @@
-import * as exim from "./exim/pkg"
+import * as exim from "./dist/exim";
 
 const SAVE_ID: string = "save-button";
 const HIDDEN_CLASS: string = "hidden";
@@ -17,7 +17,7 @@ let dragCurrent: [number, number] = [-1, -1];
 let dragValue: boolean = false;
 let mouseDown: boolean = false;
 
-let resizeTimer: NodeJS.Timer;
+let resizeTimer: ReturnType<typeof setTimeout>;
 
 window.addEventListener("resize", () => {
     document.body.classList.add("resize-anim-stop");

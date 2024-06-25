@@ -20,9 +20,8 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(index)
             .service(actix_files::Files::new("/static", Path::new(FRONTEND).join("static")))
-            .service(actix_files::Files::new("/js", Path::new(FRONTEND).join("out")))
+            .service(actix_files::Files::new("/scripts", Path::new(FRONTEND).join("scripts").join("dist")))
             .service(actix_files::Files::new("/css", Path::new(FRONTEND).join("css")))
-            .service(actix_files::Files::new("/wasm", Path::new(FRONTEND).join("exim").join("web").join("dist")))
             .wrap(Logger::default())
     )
     .bind(("127.0.0.1", 8080))?
