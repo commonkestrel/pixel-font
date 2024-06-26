@@ -27,11 +27,11 @@ pub fn serialize(font: Font) -> Vec<u8> {
     utils::set_panic_hook();
     console_log!("{:?}", font);
 
-    let i_size = font.content.len().checked_ilog2().unwrap_or(0) + 1;
-    let y_size = font.height.checked_ilog2().unwrap_or(0) + 1;
+    let i_size = (font.content.len() - 1).checked_ilog2().unwrap_or(0) + 1;
+    let y_size = (font.height - 1).checked_ilog2().unwrap_or(0) + 1;
     // `x_size` is divided by 8 because we are packing 8 bits into a byte,
     // and x generally works best for this since screens typically scan ltr.
-    let x_size = ((font.width.checked_ilog2().unwrap_or(0) + 1) / 8);
+    let x_size = ((font.width - 1) / 8).checked_ilog2().unwrap_or(0);
     let index_size = i_size + x_size + y_size;
 
     let mut exp = vec![0x00; 1 << index_size];
@@ -40,7 +40,8 @@ pub fn serialize(font: Font) -> Vec<u8> {
         for y in 0..font.height {
             for x in 0..font.width {
                 let index = (c << (x_size + y_size)) + (y << x_size) + x/8;
-                let bit = x % 8;
+                // We subtract from 7 to flip correct the bit order, since otherwise we flip to bit-endian
+                let bit = 7 - (x % 8);
 
                 exp[index] |= (character[y*font.width + x] as u8) << bit;
             }

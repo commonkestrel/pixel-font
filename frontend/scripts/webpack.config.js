@@ -3,11 +3,25 @@ const path = require('path');
 module.exports = {
     entry: './main.ts',
     module: {
+        defaultRules: [
+            {
+                type: 'javascript/auto',
+                resolve: {},
+            },
+            {
+                test: /\.json$/,
+                type: 'json',
+            },
+        ],
         rules: [
             {
                 test: /\.ts$/,
                 use:'ts-loader',
                 exclude: /node-modules/,
+            },
+            {
+                test: /\.wasm$/,
+                type: "asset/inline",
             },
         ],
     },
@@ -21,6 +35,7 @@ module.exports = {
     },
     experiments: {
         asyncWebAssembly: true,
+        topLevelAwait: true,
     },
     mode: "production"
 }

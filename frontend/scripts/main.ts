@@ -1,4 +1,5 @@
-import * as exim from "./exim/pkg/exim";
+import * as wasm from "./wasm";
+const exim = wasm.exim;
 
 const SAVE_ID: string = "save-button";
 const HIDDEN_CLASS: string = "hidden";
@@ -28,6 +29,8 @@ window.addEventListener("resize", () => {
 })
 
 document.addEventListener("DOMContentLoaded", () => {
+    wasm.initWasm();
+
     document.getElementById("new-button")?.addEventListener("click", (ev) => {
         const modal = <any>document.getElementById("new-modal");
         modal?.showModal();

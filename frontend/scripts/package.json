@@ -4,6 +4,10 @@
   "description": "The main scripts for the font creator",
   "main": "main.ts",
   "scripts": {
+    "build-wasm": "cargo +nightly build --target=wasm32-unknown-unknown --manifest-path ./exim/Cargo.toml --out-dir=./exim/dist -Z unstable-options",
+    "bind": "wasm-bindgen --out-dir=exim/dist --target=web --omit-default-module-path ./exim/dist/exim.wasm",
+    "pack": "npx webpack",
+    "build": "npm run build-wasm && npm run bind && npm run pack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "commonkestrel",
@@ -13,7 +17,6 @@
     "@types/webpack": "^5.28.5",
     "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.2",
-    "wasm-loader": "^1.3.0"
+    "typescript": "^5.5.2"
   }
 }
