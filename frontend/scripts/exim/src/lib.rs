@@ -1,3 +1,5 @@
+use std::io::Write;
+
 mod utils;
 
 use wasm_bindgen::prelude::*;
@@ -51,4 +53,83 @@ pub fn serialize(font: Font) -> Vec<u8> {
     console_log!("{exp:?}");
 
     exp
+}
+
+fn deserialize(char_size: usize, stream: &[u8]) -> Vec<Vec<bool>> {
+    // Multiplying (and dividing `char_size` later) by 8 since they are packed into u8's
+    let mut content = Vec::with_capacity(8 * stream.len() / char_size);
+
+    for character in stream.chunks_exact(char_size / 8) {
+        let mut char_content = Vec::with_capacity(char_size);
+
+        for i in 0..char_size / 8 {
+            let byte = character[i];
+            for bit in 0..8 {
+                // We do `7-bit` here to correct the reverse ordering
+                let mask = 1 << (7-bit);
+                let value = (byte & mask) != 0;
+                char_content.push(value);
+            }
+        }
+
+        content.push(char_content);
+    }
+
+    content
+}
+
+#[wasm_bindgen]
+pub fn export(font: Font) -> Vec<u8> {
+    let width = font.width as u64;
+    let height = font.height as u64;
+
+    let mut content: Vec<u8> = font.content.iter().flat_map(|character| character.chunks_exact(8).map(|bits| {
+        let mut byte: u8 = 0;
+
+        for bit in 0..8 {
+            byte |= if bits[7-bit] { 1 } else { 0 } << bit
+        }
+
+        byte
+    })).collect();
+
+    let width_arr = width.to_le_bytes();
+    let height_arr = height.to_le_bytes();
+    let _ = content.write_all(&width_arr);
+    let _ = content.write_all(&height_arr);
+
+    content
+}
+
+#[wasm_bindgen]
+pub fn import(stream: &[u8]) -> Result<Font, ImportError> {
+    if stream.len() < 16 {
+        return Err(ImportError::MissingDimensions);
+    }
+
+    let mut height_arr: [u8; 8] = Default::default();
+    height_arr.copy_from_slice(&stream[stream.len()-8..stream.len()]);
+    let height = u64::from_le_bytes(height_arr) as usize;
+
+    let mut width_arr: [u8; 8] = Default::default();
+    width_arr.copy_from_slice(&stream[stream.len()-16..stream.len()-8]);
+    let width = u64::from_le_bytes(width_arr) as usize;
+
+    let content = deserialize(height*width, &stream[0..stream.len()-16]);
+
+    if content.len() != height * width {
+        return Err(ImportError::MismatchedSize);
+    }
+
+    Ok(Font {
+        width,
+        height,
+        content
+    })
+}
+
+#[wasm_bindgen]
+pub enum ImportError {
+    MismatchedSize,
+    MissingDimensions,
 }
