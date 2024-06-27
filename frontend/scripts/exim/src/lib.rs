@@ -2,13 +2,9 @@ use std::io::Write;
 
 mod utils;
 
+use js_sys::{Array, Number};
 use wasm_bindgen::prelude::*;
 use wasm_bindgen_test::console_log;
-
-#[wasm_bindgen]
-extern "C" {
-    fn alert(s: &str);
-}
 
 #[wasm_bindgen]
 #[derive(Debug)]
@@ -16,6 +12,26 @@ pub struct Font {
     width: usize,
     height: usize,
     content: Vec<Vec<bool>>
+}
+
+#[wasm_bindgen]
+impl Font {
+    pub fn get_width(&self) -> usize {
+        self.width
+    }
+
+    pub fn get_height(&self) -> usize {
+        self.height
+    }
+
+    pub fn get_content(&self) -> Vec<Array> {
+        self.content.iter().map(|c| c.iter().map(|pixel| JsValue::from_bool(*pixel)).collect::<Array>()).collect()
+    }
+}
+
+#[wasm_bindgen]
+pub fn init_hooks() {
+    utils::set_panic_hook();
 }
 
 #[wasm_bindgen]
@@ -102,9 +118,9 @@ pub fn export(font: Font) -> Vec<u8> {
 }
 
 #[wasm_bindgen]
-pub fn import(stream: &[u8]) -> Result<Font, ImportError> {
+pub fn import(stream: &[u8]) -> Font {
     if stream.len() < 16 {
-        return Err(ImportError::MissingDimensions);
+        panic!("missing dimensions in stream");
     }
 
     let mut height_arr: [u8; 8] = Default::default();
@@ -118,14 +134,14 @@ pub fn import(stream: &[u8]) -> Result<Font, ImportError> {
     let content = deserialize(height*width, &stream[0..stream.len()-16]);
 
     if content.len() != height * width {
-        return Err(ImportError::MismatchedSize);
+        panic!("dimensions do not match data size: {} != {}", content.len(), height*width);
     }
 
-    Ok(Font {
+    Font {
         width,
         height,
         content
-    })
+    }
 }
 
 #[wasm_bindgen]

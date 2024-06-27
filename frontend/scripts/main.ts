@@ -43,33 +43,20 @@ document.addEventListener("DOMContentLoaded", () => {
         if(files != null) {
             const file = files[0];
             await file.stream().getReader().read().then((font) => {
-                const newFont = exim._import(font.value!);
+                const iFont = exim._import(font.value!);
+                const newFont = {
+                    width: iFont.get_width(),
+                    height: iFont.get_height(),
+                    content: <boolean[][]>iFont.get_content(),
+                };
+
+                initFont(newFont);
             });
         }
     }, false);
 
     document.getElementById("save-button")?.addEventListener("click", () => {
-        if (currentFont != null) {
-
-            const font = exim.create_font(currentFont.width, currentFont.height, currentFont.content);
-            const content = exim.serialize(font);
-
-            const file = new Blob([content], { type: "application/octet-stream" });
-            if('msSaveOrOpenBlob' in window.navigator) {
-                (<any>window.navigator.msSaveOrOpenBlob)(file, "font.rom");
-            } else {
-                const a = document.createElement('a');
-                const url = URL.createObjectURL(file);
-                a.href = url;
-                a.download = "font.rom";
-                document.body.appendChild(a);
-                a.click();
-                setTimeout(() => {
-                    document.removeChild(a);
-                    window.URL.revokeObjectURL(url);
-                }, 0);
-            }
-        }
+        saveFont();
     });
 
     document.getElementById("new-close")?.addEventListener("click", (ev) => {
@@ -92,20 +79,13 @@ document.addEventListener("DOMContentLoaded", () => {
             content[i] = new Array(width * height).fill(false);
         }
 
-        currentFont = {
+        const newFont = {
             width: width,
             height: height,
             content: content
         };
 
-        currentCharacter = 0;
-
-        updateEditor(currentFont!);
-        populateCharacters(currentFont!);
-        addSaveButton();
-        showCharacterSelect();
-
-        closeModal("new-modal");
+        initFont(newFont);
     });
 
     document.getElementById("select-open")?.addEventListener("click", (ev) => {
@@ -165,6 +145,18 @@ document.addEventListener("DOMContentLoaded", () => {
         mouseDown = false;
     });
 });
+
+const initFont = (font: Font) => {
+    currentFont = font;
+    currentCharacter = 0;
+
+    updateEditor(currentFont!);
+    populateCharacters(currentFont!);
+    addSaveButton();
+    showCharacterSelect();
+
+    closeModal("new-modal");
+}
 
 const updateEditor = (font: Font) => {
     const explainContent = document.getElementById("explain-content")!;
@@ -419,4 +411,50 @@ const closeFooter = () => {
         document.getElementById("edit-table")!.style.zIndex = "";
     }, 1000);
     
+}
+
+const saveROM = () => {
+    if (currentFont != null) {
+        const font = exim.create_font(currentFont.width, currentFont.height, currentFont.content);
+        const content = exim.serialize(font);
+
+        const file = new Blob([content], { type: "application/octet-stream" });
+        if('msSaveOrOpenBlob' in window.navigator) {
+            (<any>window.navigator.msSaveOrOpenBlob)(file, "font.rom");
+        } else {
+            const a = document.createElement('a');
+            const url = URL.createObjectURL(file);
+            a.href = url;
+            a.download = "font.rom";
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                document.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 0);
+        }
+    }
+}
+
+const saveFont = () => {
+    if (currentFont != null) {
+        const font = exim.create_font(currentFont.width, currentFont.height, currentFont.content);
+        const content = exim._export(font);
+
+        const file = new Blob([content], { type: "application/octet-stream" });
+        if('msSaveOrOpenBlob' in window.navigator) {
+            (<any>window.navigator.msSaveOrOpenBlob)(file, ".font");
+        } else {
+            const a = document.createElement('a');
+            const url = URL.createObjectURL(file);
+            a.href = url;
+            a.download = ".font";
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => {
+                document.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 0);
+        }
+    }
 }
