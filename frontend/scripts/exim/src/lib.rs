@@ -133,9 +133,6 @@ pub fn import(stream: &[u8]) -> Font {
 
     let content = deserialize(height*width, &stream[0..stream.len()-16]);
 
-    if content.len() != height * width {
-        panic!("dimensions do not match data size: {} != {}", content.len(), height*width);
-    }
 
     Font {
         width,
