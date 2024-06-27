@@ -12,8 +12,15 @@
             </div>
             <button id="new-button" class="header-button double">New</button>
             <label class="header-button double" id="import-button" for="import-file">Import</label>
-            <input name="import-file" type="file" id="import-file" class=""></input>
-            <button id="save-button" class="header-button hidden">Save As</button>
+            <input name="import-file" type="file" id="import-file" class="hidden"></input>
+            <div id="dropdown-wrapper" class="triple hidden">
+                <input id="save-expand" type="checkbox" class="hidden dropdown"></input>
+                <label class = "header-button" id="save-button" for="save-expand">Export</label>
+                <div class="dropdown-inner">
+                    <button class="dropdown-option">Save as FONT</button>
+                    <button class="dropdown-option">Save as ROM</button>
+                </div>
+            </div>   
         </div>
         <div class="alerts" id="alerts"></div>
         <div class="content">

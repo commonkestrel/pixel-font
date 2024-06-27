@@ -406,7 +406,7 @@ h3 {
     margin: 0;
 }
 
-input[type=file] {
+input.hidden-input {
     display: none;
 }
 
@@ -414,4 +414,44 @@ label.header-button {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.dropdown + label {
+    transition: background-color 0.125s, color 0.125s;
+}
+
+.dropdown:checked + label {
+    color: var(--on-color);
+    background-color: var(--background-color)
+}
+
+.dropdown-option {
+    color: #FFF;
+    font-size: 1.125rem;
+    margin: 0;
+    width: 100%;
+    background-color: var(--on-color);
+    outline: none;
+    border: none;
+    height: 3rem;
+}
+
+.dropdown-inner {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    margin-top: 0.5rem;
+    height: 6rem;
+    background-color: var(--on-color);
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    transition: transform 0.125s;
+}
+
+.dropdown:checked + label + .dropdown-inner {
+    transform: scaleY(1);
+}
+
+.dropdown:not(:checked) + label + .dropdown-inner {
+    transform: scaleY(0);
 }

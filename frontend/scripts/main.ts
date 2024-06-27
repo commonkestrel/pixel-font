@@ -31,6 +31,10 @@ window.addEventListener("resize", () => {
 document.addEventListener("DOMContentLoaded", () => {
     wasm.initWasm();
 
+    document.getElementById("save-expand")?.addEventListener("change", (ev) => {
+        console.log((<HTMLInputElement>document.getElementById("save-expand")).checked)
+    });
+
     document.getElementById("new-button")?.addEventListener("click", (ev) => {
         const modal = <any>document.getElementById("new-modal");
         modal?.showModal();
@@ -56,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }, false);
 
     document.getElementById("save-button")?.addEventListener("click", () => {
-        saveFont();
+        
     });
 
     document.getElementById("new-close")?.addEventListener("click", (ev) => {
@@ -291,9 +295,9 @@ const toggleSaveButton = () => {
 }
 
 const addSaveButton = () => {
-    document.getElementById(SAVE_ID)?.classList.remove(HIDDEN_CLASS);
+    document.getElementById("dropdown-wrapper")?.classList.remove(HIDDEN_CLASS);
     
-    const headerButtons = document.getElementsByClassName(HEADER_BUTTON_CLASS);
+    const headerButtons = document.getElementsByClassName("double");
     for (let i = 0; i < headerButtons.length; i++) {
         const button = headerButtons[i];
         button.classList.add("triple");
@@ -302,9 +306,9 @@ const addSaveButton = () => {
 }
 
 const removeSaveButton = () => {
-    document.getElementById(SAVE_ID)?.classList.add(HIDDEN_CLASS);
+    document.getElementById("dropdown-wrapper")?.classList.add(HIDDEN_CLASS);
     
-    const headerButtons = document.getElementsByClassName(HEADER_BUTTON_CLASS);
+    const headerButtons = document.getElementsByClassName("triple");
     for (let i = 0; i < headerButtons.length; i++) {
         const button = headerButtons[i];
         button.classList.add("double");
