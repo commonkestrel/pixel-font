@@ -59,8 +59,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }, false);
 
-    document.getElementById("save-button")?.addEventListener("click", () => {
-        
+    document.getElementById("font-export")?.addEventListener("click", () => {
+        (<HTMLInputElement>document.getElementById("save-expand")!).checked = false;
+        saveFont();
+    });
+
+    document.getElementById("rom-export")?.addEventListener("click", () => {
+        (<HTMLInputElement>document.getElementById("save-expand")!).checked = false;
+        saveROM();
     });
 
     document.getElementById("new-close")?.addEventListener("click", (ev) => {
@@ -298,8 +304,8 @@ const addSaveButton = () => {
     document.getElementById("dropdown-wrapper")?.classList.remove(HIDDEN_CLASS);
     
     const headerButtons = document.getElementsByClassName("double");
-    for (let i = 0; i < headerButtons.length; i++) {
-        const button = headerButtons[i];
+    while (headerButtons.length > 0) {
+        const button = headerButtons[0];
         button.classList.add("triple");
         button.classList.remove("double");
     }

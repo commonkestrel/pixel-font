@@ -42,19 +42,19 @@ body {
     transition: background-color 0.25s, border-color 0.25s, margin-left 0.25s;
 }
 
-.double:first-of-type {
+.double:first-child {
     margin-left: calc(33.3% - 6.5rem);
 }
 
-.double:not(:first-of-type) {
+.double:not(:first-child) {
     margin-left: calc(33.3% - 11rem);
 }
 
-.triple:first-of-type {
+.triple:first-child {
     margin-left: calc(25% - 6.5rem);
 }
 
-.triple:not(:first-of-type) {
+.triple:not(:first-child) {
     margin-left: calc(25% - 11rem);
 }
 
