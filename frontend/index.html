@@ -11,9 +11,11 @@
                 <div class="hamburger-line"></div>
             </div>
             <button id="new-button" class="header-button double">New</button>
-            <button id="import-button" class="header-button double">Import</button>
+            <label class="header-button double" id="import-button" for="import-file">Import</label>
+            <input name="import-file" type="file" id="import-file" class=""></input>
             <button id="save-button" class="header-button hidden">Save As</button>
         </div>
+        <div class="alerts" id="alerts"></div>
         <div class="content">
             <dialog id="new-modal" class="modal">
                 <div class="modal-header">

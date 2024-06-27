@@ -37,9 +37,18 @@ document.addEventListener("DOMContentLoaded", () => {
         modal?.classList.add("open");
     });
 
-    document.getElementById("save-button")?.addEventListener("click", () => {
-    console.log("saving");
+    document.getElementById("import-file")?.addEventListener("change", async (ev) => {
+        const files = (<HTMLInputElement>document.getElementById("import-file")!).files;
 
+        if(files != null) {
+            const file = files[0];
+            await file.stream().getReader().read().then((font) => {
+                const newFont = exim._import(font.value!);
+            });
+        }
+    }, false);
+
+    document.getElementById("save-button")?.addEventListener("click", () => {
         if (currentFont != null) {
 
             const font = exim.create_font(currentFont.width, currentFont.height, currentFont.content);
